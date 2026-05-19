@@ -1540,8 +1540,9 @@
      RESPONSIVE — TABLETTE (≤ 900px)
   ═══════════════════════════════════════════ */
   @media (max-width: 900px) {
-    .story-grid { grid-template-columns: 1fr; gap: 40px; }
-    .story-img-col { display: none; }
+    .story-grid { grid-template-columns: 1fr; gap: 36px; }
+    .story-img-col { display: flex; justify-content: center; }
+    .story-photo-wrap { width: min(300px, 72vw); aspect-ratio: 3/4; margin: 0 auto; }
     .sec-h2 { font-size: clamp(1.6rem, 4vw, 2.4rem); }
     .nle-border-wrap { overflow: hidden; }
   }
@@ -1640,8 +1641,8 @@
     .tcard { width: 240px; }
 
     /* Footer */
-    .foot { flex-direction: column; align-items: flex-start; gap: 14px; }
-    .foot-links { gap: 6px; }
+    .foot { flex-direction: column; align-items: center; gap: 14px; text-align: center; }
+    .foot-links { gap: 6px; justify-content: center; }
   }
   @media (prefers-reduced-motion: reduce) {
     *,*::before,*::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
