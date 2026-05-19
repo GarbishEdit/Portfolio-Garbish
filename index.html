@@ -1534,24 +1534,114 @@
   /* ═══════════════════════════════════════════
      RESPONSIVE
   ═══════════════════════════════════════════ */
+  /* ═══════════════════════════════════════════
+     RESPONSIVE — TABLETTE (≤ 900px)
+  ═══════════════════════════════════════════ */
   @media (max-width: 900px) {
     .story-grid { grid-template-columns: 1fr; gap: 40px; }
     .story-img-col { display: none; }
+    .sec-h2 { font-size: clamp(1.6rem, 4vw, 2.4rem); }
+    .nle-border-wrap { overflow: hidden; }
   }
+
+  /* ═══════════════════════════════════════════
+     RESPONSIVE — MOBILE (≤ 768px)
+  ═══════════════════════════════════════════ */
   @media (max-width: 768px) {
+    /* Nav */
     .nav-links, .nav-cta { display: none; }
     .hamburger { display: flex; }
+
+    /* Sections */
+    section { padding: 64px 0; }
+
+    /* Hero */
+    .hero-inner { gap: clamp(6px, 1.2vh, 12px); }
+    .hero-h1 { font-size: clamp(2rem, 7vw, 3rem); }
+    .hero-sub { font-size: 14px; max-width: 320px; }
+    .hero-vsl { max-width: min(480px, 92vw); }
+
+    /* Stats inside hero */
+    .stats-row {
+      grid-template-columns: repeat(3, 1fr);
+      margin-left: calc(-1 * var(--px));
+      margin-right: calc(-1 * var(--px));
+    }
+    .stat-val { font-size: clamp(16px, 4.5vw, 26px); }
+    .stat-label { font-size: 10px; }
+    .stats-cell { padding: 14px 10px; }
+
+    /* Episodes */
     .ep-grid { grid-template-columns: 1fr; }
 
-    .stats-row { grid-template-columns: 1fr; }
-    .stats-cell { border-right: none; border-bottom: 1px solid var(--border); }
-    .stats-cell:last-child { border-bottom: none; }
-    .nle-track-label { width: 60px; }
-    .nle-track-labels { width: 60px; }
-    section { padding: 80px 0; }
+    /* Comparison charts */
+    .insight-half { padding: 16px 14px 14px; }
+    .chart-canvas-wrap { height: 90px; }
+    .chart-counter { font-size: clamp(1.4rem, 6vw, 2rem); }
+
+    /* Motion video — empêcher tout débordement */
+    .motion-video-rainbow {
+      overflow: hidden;
+      border-radius: var(--r-lg);
+      max-width: calc(100vw - 2 * var(--px));
+    }
+    .motion-video-rainbow::before,
+    .motion-video-rainbow::after { inset: 0; border-radius: var(--r-lg); }
+    .motion-video-inner { border-radius: calc(var(--r-lg) - 2px); }
+
+    /* NLE timeline — scrollable horizontalement */
+    .nle-track-label  { width: 52px; font-size: 9px; }
+    .nle-track-labels { width: 52px; }
+    .nle { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .nle-track-content { overflow-x: auto; }
+
+    /* Formations marquee */
+    .tcard { width: 260px; }
+
+    /* Story */
+    .story-stat { position: static; margin-top: 12px; display: inline-flex; }
+
+    /* CTA section */
+    .cta-h1 { font-size: clamp(2rem, 7vw, 3rem); }
+
+    /* Footer */
+    .foot-links { flex-wrap: wrap; gap: 8px; }
   }
+
+  /* ═══════════════════════════════════════════
+     RESPONSIVE — PETIT MOBILE (≤ 480px)
+  ═══════════════════════════════════════════ */
   @media (max-width: 480px) {
+    section { padding: 52px 0; }
+
+    /* Hero compacté */
+    .hero-badge { font-size: 11px; padding: 6px 12px; }
+    .hero-h1 { font-size: clamp(1.8rem, 8vw, 2.6rem); }
+    .hero-vsl { max-width: 100%; }
+
+    /* Stats en colonne sur très petit écran */
+    .stats-row { grid-template-columns: 1fr; }
+    .stats-cell { border-right: none; border-bottom: 1px solid var(--border); padding: 12px 16px; }
+    .stats-cell:last-child { border-bottom: none; }
+    .stat-val { font-size: clamp(20px, 6vw, 28px); }
+
+    /* Comparison — une colonne (déjà géré à 600px) */
+    .comparison-grid { grid-template-columns: 1fr; }
+    .chart-canvas-wrap { height: 80px; }
+
+    /* Bouton glow */
+    .btn-glow { padding: 12px 24px; font-size: 14px; }
+
+    /* NLE labels encore plus petits */
+    .nle-track-label  { width: 40px; font-size: 8px; }
+    .nle-track-labels { width: 40px; }
+
+    /* Formations */
+    .tcard { width: 240px; }
+
+    /* Footer */
     .foot { flex-direction: column; align-items: flex-start; gap: 14px; }
+    .foot-links { gap: 6px; }
   }
   @media (prefers-reduced-motion: reduce) {
     *,*::before,*::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
@@ -2410,7 +2500,7 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeContact
 
     const obs = new IntersectionObserver(entries => {
       entries.forEach(e => { if (e.isIntersecting) { animate(); obs.disconnect(); } });
-    }, { threshold: 0.3 });
+    }, { threshold: 0.1 });
     obs.observe(canvas.closest('.insight-half'));
 
     resize();
