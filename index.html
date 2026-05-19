@@ -2403,7 +2403,7 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeContact
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     const sampled = samplePath(pts, 200);
-    let animFrame, started = false;
+    let animFrame, started = false, finished = false;
 
     function resize() {
       const r = canvas.parentElement.getBoundingClientRect();
@@ -2493,7 +2493,11 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeContact
       function step(now) {
         const raw = Math.min((now - t0) / dur, 1);
         draw(easeOut3(raw));
-        if (raw < 1) animFrame = requestAnimationFrame(step);
+        if (raw < 1) {
+          animFrame = requestAnimationFrame(step);
+        } else {
+          finished = true;
+        }
       }
       animFrame = requestAnimationFrame(step);
     }
@@ -2506,9 +2510,14 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeContact
     resize();
     window.addEventListener('resize', () => {
       cancelAnimationFrame(animFrame);
-      started = false;
       resize();
-      draw(0);
+      if (finished) {
+        // Animation déjà jouée — redessiner à l'état final
+        draw(1);
+      } else {
+        started = false;
+        draw(0);
+      }
     }, { passive: true });
   }
 
