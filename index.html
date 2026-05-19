@@ -951,13 +951,15 @@
     border-radius: calc(var(--r-xl) + 2px);
     padding: 2px;
     isolation: isolate;
+    overflow: hidden;
   }
+  /* Le gradient remplit exactement le wrapper — le padding de 2px est le "border" visible */
   .motion-video-rainbow::before {
     content: '';
     position: absolute;
-    inset: -1.5px;
+    inset: 0;
     border-radius: inherit;
-    z-index: -1;
+    z-index: 0;
     background: conic-gradient(from var(--ba, 0deg) at 50% 50%,
       #160000 0deg, #160000 52deg,
       #880000 70deg, #cc0000 82deg, #ff1515 90deg,
@@ -965,27 +967,27 @@
       #880000 120deg, #160000 138deg, #160000 360deg);
     animation: spin-border 5s linear infinite;
   }
+  /* Halo flou derrière — déborde légèrement vers l'extérieur */
   .motion-video-rainbow::after {
     content: '';
     position: absolute;
-    inset: -1.5px;
-    border-radius: inherit;
-    z-index: -2;
+    inset: -8px;
+    border-radius: calc(var(--r-xl) + 10px);
+    z-index: -1;
     background: conic-gradient(from var(--ba, 0deg) at 50% 50%,
-      #160000 0deg, #160000 52deg,
+      transparent 0deg, transparent 52deg,
       #880000 70deg, #cc0000 82deg, #ff1515 90deg,
       #ff5555 94deg, #ff1515 98deg, #cc0000 108deg,
-      #880000 120deg, #160000 138deg, #160000 360deg);
+      #880000 120deg, transparent 138deg, transparent 360deg);
     animation: spin-border 5s linear infinite;
-    filter: blur(18px);
-    opacity: 0.7;
+    filter: blur(16px);
+    opacity: 0.55;
   }
   .motion-video-inner {
-    border-radius: calc(var(--r-xl) - 1px);
+    border-radius: var(--r-xl);
     overflow: hidden;
     position: relative;
     z-index: 1;
-    background: var(--bg2);
   }
   .motion-video {
     display: block;
@@ -1579,15 +1581,13 @@
     .chart-canvas-wrap { height: 90px; }
     .chart-counter { font-size: clamp(1.4rem, 6vw, 2rem); }
 
-    /* Motion video — empêcher tout débordement */
+    /* Motion video mobile */
     .motion-video-rainbow {
-      overflow: hidden;
-      border-radius: var(--r-lg);
       max-width: calc(100vw - 2 * var(--px));
+      border-radius: calc(var(--r-lg) + 2px);
     }
-    .motion-video-rainbow::before,
-    .motion-video-rainbow::after { inset: 0; border-radius: var(--r-lg); }
-    .motion-video-inner { border-radius: calc(var(--r-lg) - 2px); }
+    .motion-video-rainbow::after { display: none; }
+    .motion-video-inner { border-radius: var(--r-lg); }
 
     /* NLE timeline — scrollable horizontalement */
     .nle-track-label  { width: 52px; font-size: 9px; }
