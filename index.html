@@ -2504,15 +2504,24 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeContact
       animFrame = requestAnimationFrame(step);
     }
 
+    // Première apparition → lance l'animation
     const obs = new IntersectionObserver(entries => {
       entries.forEach(e => { if (e.isIntersecting) { animate(); obs.disconnect(); } });
     }, { threshold: 0.1 });
     obs.observe(canvas.closest('.insight-half'));
 
+    // Retour dans le viewport après scroll → redessine l'état sauvegardé
+    const redrawObs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting && lastT > 0) { resize(); draw(lastT); }
+      });
+    }, { threshold: 0.01 });
+    redrawObs.observe(canvas);
+
     resize();
     window.addEventListener('resize', () => {
-      resize();
-      draw(lastT);
+      const r = canvas.parentElement.getBoundingClientRect();
+      if (r.width > 0 && r.height > 0) { resize(); draw(lastT); }
     }, { passive: true });
   }
 
