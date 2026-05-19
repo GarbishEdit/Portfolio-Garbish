@@ -445,9 +445,9 @@
     margin: 0;
     white-space: nowrap;
   }
-  .hero-h1-line1 { display: block; color: var(--text); }
+  .hero-h1-line1 { display: inline; color: var(--text); }
   .hero-h1-line2 {
-    display: block;
+    display: inline;
     background: linear-gradient(120deg, #FF6666 0%, #FF1515 50%, #CC0000 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -1840,7 +1840,7 @@
 
       <div class="ep-grid">
         <!-- EP01 -->
-        <a href="https://youtu.be/Xvrn3ORnL98" target="_blank" rel="noopener noreferrer" class="ep-card sc fi fi-d1" aria-label="Épisode 1">
+        <div data-ytid="Xvrn3ORnL98" class="ep-card sc fi fi-d1" role="button" tabindex="0" aria-label="Lire Épisode 1">
           <div class="ep-thumb">
             <div class="ep-bg g1"></div>
             <img class="ep-thumb-img" src="https://img.youtube.com/vi/Xvrn3ORnL98/maxresdefault.jpg" alt="Épisode 1" loading="lazy" onerror="this.style.display='none'">
@@ -1852,9 +1852,9 @@
             <div class="ep-num">Épisode 01</div>
             <h3 class="ep-title">Le JAPON qu'on ne vous montre JAMAIS | Documentaire Ep.1</h3>
           </div>
-        </a>
+        </div>
         <!-- EP02 -->
-        <a href="https://youtu.be/qS9E1yS3li0" target="_blank" rel="noopener noreferrer" class="ep-card sc fi fi-d2" aria-label="Épisode 2">
+        <div data-ytid="qS9E1yS3li0" class="ep-card sc fi fi-d2" role="button" tabindex="0" aria-label="Lire Épisode 2">
           <div class="ep-thumb">
             <div class="ep-bg g2"></div>
             <img class="ep-thumb-img" src="https://img.youtube.com/vi/qS9E1yS3li0/maxresdefault.jpg" alt="Épisode 2" loading="lazy" onerror="this.style.display='none'">
@@ -1866,9 +1866,9 @@
             <div class="ep-num">Épisode 02</div>
             <h3 class="ep-title">Le JAPON qu'on ne vous montre JAMAIS | Documentaire Ep.2</h3>
           </div>
-        </a>
+        </div>
         <!-- EP03 -->
-        <a href="https://youtu.be/XOw0-D50q2w" target="_blank" rel="noopener noreferrer" class="ep-card sc fi fi-d3" aria-label="Épisode 3">
+        <div data-ytid="XOw0-D50q2w" class="ep-card sc fi fi-d3" role="button" tabindex="0" aria-label="Lire Épisode 3">
           <div class="ep-thumb">
             <div class="ep-bg g3"></div>
             <img class="ep-thumb-img" src="https://img.youtube.com/vi/XOw0-D50q2w/maxresdefault.jpg" alt="Épisode 3" loading="lazy" onerror="this.style.display='none'">
@@ -1880,9 +1880,9 @@
             <div class="ep-num">Épisode 03</div>
             <h3 class="ep-title">Le JAPON qu'on ne vous montre JAMAIS | Documentaire Ep.3</h3>
           </div>
-        </a>
+        </div>
         <!-- EP04 -->
-        <a href="https://youtu.be/U0kS1mxix68" target="_blank" rel="noopener noreferrer" class="ep-card sc fi fi-d4" aria-label="Épisode 4">
+        <div data-ytid="U0kS1mxix68" class="ep-card sc fi fi-d4" role="button" tabindex="0" aria-label="Lire Épisode 4">
           <div class="ep-thumb">
             <div class="ep-bg g4"></div>
             <img class="ep-thumb-img" src="https://img.youtube.com/vi/U0kS1mxix68/maxresdefault.jpg" alt="Épisode 4" loading="lazy" onerror="this.style.display='none'">
@@ -1894,9 +1894,9 @@
             <div class="ep-num">Épisode 04</div>
             <h3 class="ep-title">Le JAPON qu'on ne vous montre JAMAIS | Documentaire Ep.4</h3>
           </div>
-        </a>
+        </div>
         <!-- EP05 -->
-        <a href="https://youtu.be/xRSmceFhJgo" target="_blank" rel="noopener noreferrer" class="ep-card sc fi fi-d5" aria-label="Épisode 5">
+        <div data-ytid="xRSmceFhJgo" class="ep-card sc fi fi-d5" role="button" tabindex="0" aria-label="Lire Épisode 5">
           <div class="ep-thumb">
             <div class="ep-bg g5"></div>
             <img class="ep-thumb-img" src="https://img.youtube.com/vi/xRSmceFhJgo/maxresdefault.jpg" alt="Épisode 5" loading="lazy" onerror="this.style.display='none'">
@@ -1908,7 +1908,7 @@
             <div class="ep-num">Épisode 05</div>
             <h3 class="ep-title">C'EST LA FIN... Le JAPON qu'on ne vous montre JAMAIS | Documentaire Ep.5</h3>
           </div>
-        </a>
+        </div>
       </div>
 
       <!-- Motions -->
@@ -2188,10 +2188,10 @@
   <section id="cta-final" aria-label="Travaillons ensemble">
     <div class="wrap">
       <h2 class="cta-title-big fi fi-d1">
-        <span class="line-1">Ta prochaine vidéo</span>
-        <span class="line-2">est déjà en retard.</span>
+        <span class="line-1">Tu publies dans le vide.</span>
+        <span class="line-2">C'est ton monteur.</span>
       </h2>
-      <p class="cta-sub fi fi-d2">Chaque semaine sans monteur, c'est une vidéo que tu n'as pas publiée. Réglons ça.</p>
+      <p class="cta-sub fi fi-d2">Un mauvais montage repousse 80% de tes spectateurs avant la fin. Tes idées méritent un monteur qui retient l'attention — pas qui la perd.</p>
       <div style="display:flex;justify-content:center" class="fi fi-d3">
         <button onclick="openContact()" class="btn btn-primary btn-xl">
           <span>Me contacter</span>
@@ -2295,6 +2295,32 @@ document.addEventListener('pointermove', e => {
     el.style.setProperty('--yp', yp);
   });
 }, { passive: true });
+
+/* ══════════════════════════════════════════
+   EPISODE CARDS — lecteur YouTube in-card
+══════════════════════════════════════════ */
+document.querySelectorAll('.ep-card[data-ytid]').forEach(card => {
+  card.style.cursor = 'pointer';
+  function play() {
+    const thumb = card.querySelector('.ep-thumb');
+    if (thumb.querySelector('iframe')) return;
+    const id = card.dataset.ytid;
+    // Stopper les autres lectures en cours
+    document.querySelectorAll('.ep-thumb iframe').forEach(f => {
+      f.src = '';
+      f.remove();
+    });
+    const iframe = document.createElement('iframe');
+    iframe.src = `https://www.youtube.com/embed/${id}?autoplay=1&rel=0&modestbranding=1`;
+    iframe.allow = 'autoplay; encrypted-media; fullscreen';
+    iframe.allowFullscreen = true;
+    iframe.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;border:none;border-radius:inherit;z-index:10;';
+    thumb.style.position = 'relative';
+    thumb.appendChild(iframe);
+  }
+  card.addEventListener('click', play);
+  card.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); play(); } });
+});
 
 /* ══════════════════════════════════════════
    SPOTLIGHT CARDS (element-local coords)
