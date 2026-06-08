@@ -1740,7 +1740,7 @@
       <div class="hero-vsl ha ha-4">
         <div class="vsl-halo" aria-hidden="true"></div>
         <div class="vsl-frame" role="button" tabindex="0" aria-label="Lancer la présentation vidéo" id="vsl-frame">
-          <video id="vsl-video" src="videos/vsl-v2-web.mp4" playsinline preload="none" style="display:none;position:absolute;inset:0;width:100%;height:100%;background:#000;object-fit:contain;z-index:10;border-radius:inherit;"></video>
+          <video id="vsl-video" src="videos/vsl-v2-web.mp4" playsinline preload="none" style="opacity:0;pointer-events:none;position:absolute;inset:0;width:100%;height:100%;background:#000;object-fit:contain;z-index:10;border-radius:inherit;"></video>
           <div class="vsl-frame-bg" aria-hidden="true"></div>
           <div class="vsl-badge" aria-hidden="true" id="vsl-badge">
             <div class="vsl-dot"></div>
@@ -2307,12 +2307,14 @@ document.addEventListener('pointermove', e => {
   if (!frame || !video) return;
 
   function playVSL() {
-    video.style.display = 'block';
+    video.style.opacity = '1';
+    video.style.pointerEvents = 'auto';
     video.controls = true;
-    if (playBtn) playBtn.style.display = 'none';
-    if (badge)   badge.style.display   = 'none';
+    if (playBtn) playBtn.style.opacity = '0';
+    if (badge)   badge.style.opacity   = '0';
     video.play().catch(() => {});
     frame.style.cursor = 'default';
+    frame.removeEventListener('click', playVSL);
   }
 
   frame.addEventListener('click', playVSL);
