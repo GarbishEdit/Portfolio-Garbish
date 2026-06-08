@@ -1739,16 +1739,16 @@
       <!-- VSL -->
       <div class="hero-vsl ha ha-4">
         <div class="vsl-halo" aria-hidden="true"></div>
-        <div class="vsl-frame" role="button" tabindex="0" aria-label="Lancer la présentation vidéo (2 min)">
+        <div class="vsl-frame" role="button" tabindex="0" aria-label="Lancer la présentation vidéo" id="vsl-frame">
+          <video id="vsl-video" src="videos/vsl-v2-web.mp4" playsinline preload="none" style="display:none;position:absolute;inset:0;width:100%;height:100%;background:#000;object-fit:contain;z-index:10;border-radius:inherit;"></video>
           <div class="vsl-frame-bg" aria-hidden="true"></div>
-          <div class="vsl-badge" aria-hidden="true">
+          <div class="vsl-badge" aria-hidden="true" id="vsl-badge">
             <div class="vsl-dot"></div>
             <span class="vsl-badge-label">Présentation</span>
           </div>
-          <div class="vsl-play-btn" aria-hidden="true">
+          <div class="vsl-play-btn" aria-hidden="true" id="vsl-play-btn">
             <svg width="18" height="18" viewBox="0 0 18 18" fill="white"><path d="M5.5 3.5l10 5.5-10 5.5V3.5z"/></svg>
           </div>
-          <div class="vsl-dur" aria-hidden="true">2:00</div>
         </div>
       </div>
       <!-- CTA sous VSL -->
@@ -2300,21 +2300,24 @@ document.addEventListener('pointermove', e => {
    VSL — lecture vidéo in-frame au clic
 ══════════════════════════════════════════ */
 (function() {
-  const frame = document.querySelector('.vsl-frame');
-  if (!frame) return;
-  frame.addEventListener('click', function playVSL() {
-    if (frame.querySelector('video')) return;
-    const video = document.createElement('video');
-    video.src = 'videos/vsl-v2-web.mp4';
+  const frame   = document.getElementById('vsl-frame');
+  const video   = document.getElementById('vsl-video');
+  const playBtn = document.getElementById('vsl-play-btn');
+  const badge   = document.getElementById('vsl-badge');
+  if (!frame || !video) return;
+
+  function playVSL() {
+    video.style.display = 'block';
     video.controls = true;
-    video.autoplay = true;
-    video.playsInline = true;
-    video.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;border:none;border-radius:inherit;z-index:10;background:#000;object-fit:contain;';
-    frame.appendChild(video);
+    if (playBtn) playBtn.style.display = 'none';
+    if (badge)   badge.style.display   = 'none';
     video.play().catch(() => {});
-  });
+    frame.style.cursor = 'default';
+  }
+
+  frame.addEventListener('click', playVSL);
   frame.addEventListener('keydown', e => {
-    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); frame.click(); }
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); playVSL(); }
   });
 })();
 
