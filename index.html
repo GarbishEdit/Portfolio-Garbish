@@ -125,6 +125,13 @@
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
+  /* Même vert que la courbe de rétention */
+  .grad-green {
+    background: linear-gradient(120deg, #6EE7A0 0%, #22C55E 50%, #16A34A 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
 
   /* ═══════════════════════════════════════════
      SCROLL REVEAL
@@ -291,6 +298,7 @@
     color: var(--text-muted);
     padding: 6px 12px;
     border-radius: 8px;
+    white-space: nowrap;
     transition: color 150ms, background 150ms;
   }
   .nav-links a:hover {
@@ -298,6 +306,11 @@
     background: rgba(255,255,255,0.05);
   }
   .nav-cta { flex-shrink: 0; }
+  /* Menu à 5 liens : on resserre sur les écrans moyens */
+  @media (max-width: 980px) {
+    .nav-links { gap: 0; }
+    .nav-links a { padding: 6px 8px; font-size: 13px; }
+  }
   .hamburger {
     display: none;
     flex-direction: column;
@@ -568,9 +581,9 @@
   }
 
   /* ═══════════════════════════════════════════
-     STATS ROW
+     SOMMAIRE DU HERO (3 cases cliquables)
   ═══════════════════════════════════════════ */
-  .stats-row {
+  .hero-nav {
     border-top: 1px solid var(--border);
     border-bottom: 1px solid var(--border);
     display: grid;
@@ -581,15 +594,20 @@
     margin-right: calc(-1 * var(--px));
     margin-top: clamp(12px, 2vh, 20px);
   }
-  .stats-cell {
+  .hn-cell {
     padding: 28px 24px;
     border-right: 1px solid var(--border);
     text-align: center;
+    color: inherit; text-decoration: none;
+    transition: background .4s var(--ease);
   }
-  .stats-cell:last-child { border-right: none; }
-  .stat-val {
+  .hn-cell:last-child { border-right: none; }
+  .hn-cell:hover { background: rgba(255,21,21,0.04); }
+  /* Même rendu que les anciens chiffres « 1 an / 5 EP / 3 formations » */
+  .hn-title {
+    display: block;
     font-family: var(--font-head);
-    font-size: clamp(28px, 4vw, 44px);
+    font-size: clamp(22px, 2.8vw, 32px);
     font-weight: 800;
     background: linear-gradient(135deg, #FF6666, #FF1515);
     -webkit-background-clip: text;
@@ -598,11 +616,37 @@
     line-height: 1.1;
     margin-bottom: 6px;
   }
-  .stat-label {
+  .hn-label {
     font-family: var(--font-body);
     font-size: 13px;
     color: var(--text-muted);
+    transition: color .3s var(--ease);
   }
+  .hn-cell:hover .hn-label { color: var(--text); }
+  /* Indice « cliquable » : petite flèche qui rebondit doucement */
+  .hn-label { display: inline-flex; align-items: center; gap: 6px; }
+  .hn-arrow {
+    width: 13px; height: 13px;
+    color: var(--red);
+    animation: hnBounce 1.8s var(--ease) infinite;
+  }
+  .hn-cell:nth-child(2) .hn-arrow { animation-delay: .2s; }
+  .hn-cell:nth-child(3) .hn-arrow { animation-delay: .4s; }
+  @keyframes hnBounce {
+    0%, 60%, 100% { transform: translateY(0); }
+    30%           { transform: translateY(4px); }
+  }
+  .hn-cell:hover .hn-title { filter: brightness(1.15); }
+  @media (prefers-reduced-motion: reduce) { .hn-arrow { animation: none; } }
+
+  @media (max-width: 760px) {
+    .hero-nav { grid-template-columns: 1fr; }
+    .hn-cell { border-right: none; border-bottom: 1px solid var(--border); padding: 14px 16px; }
+    .hn-cell:last-child { border-bottom: none; }
+  }
+
+  /* Mon travail (projets clients) */
+  #travail { background: var(--bg); }
 
   /* ═══════════════════════════════════════════
      PROBLEM SECTION
@@ -616,6 +660,22 @@
     display: flex;
     justify-content: center;
   }
+  /* Titres des chapitres (Preuves, Mon travail, Motion design, Qui je suis) :
+     style des petits intitulés rouges (.eyebrow), un peu plus lisibles */
+  .eyebrow.chapter-title {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    font-size: 15px;
+    letter-spacing: 0.2em;
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+  #travail .sec-head { margin-bottom: clamp(20px, 3vw, 28px); }
+  .work-to-motion { margin-top: 16px; }
+  .work-to-motion .btn-glow { display: inline-block; text-decoration: none; padding: 9px 22px; font-size: 13px; }
+  .eyebrow.chapter-title::before,
+  .eyebrow.chapter-title::after { font-size: 6px; }
   .sec-h2 {
     font-family: var(--font-head);
     font-size: clamp(1.8rem, 3.5vw, 3rem);
@@ -633,31 +693,142 @@
     max-width: 560px;
     margin: 0 auto;
   }
-  /* Comparison grid */
-  .comparison-grid {
+  /* Preuve en direct (Evann) */
+  .proof {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    max-width: 880px;
+    margin: 0 auto;
+    padding: clamp(24px, 4vw, 44px);
+    border-radius: var(--r-xl);
+    background: var(--surface);
+    border: 1px solid var(--border);
+  }
+  .proof + .proof { margin-top: clamp(24px, 4vw, 40px); }
+  .proof-who {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 5px 20px 5px 5px;
+    border-radius: var(--r-pill);
+    background: var(--surface);
+    border: 1px solid var(--border);
+  }
+  .proof-avatar {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  .proof-name {
+    font-family: var(--font-head);
+    font-size: 13px; font-weight: 700;
+    color: var(--text);
+  }
+  .proof-subs {
+    font-family: var(--font-body);
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+  .proof-id { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; line-height: 1.2; }
+  .proof-subs #live-subs { color: var(--text); font-weight: 600; font-variant-numeric: tabular-nums; }
+  .proof-title { display: flex; flex-direction: column; align-items: center; gap: 6px; margin-bottom: 0; }
+  .pt-q, .pt-a { font-size: clamp(1.8rem, 4.2vw, 3.2rem); line-height: 1.05; letter-spacing: -0.04em; text-wrap: balance; }
+  .proof-who + .proof-title { margin: clamp(14px, 2vw, 20px) 0 clamp(18px, 2.6vw, 26px); }
+  /* Deux colonnes : vidéo + vues | screen rétention + titre */
+  .proof-media {
+    width: 100%;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    max-width: 860px;
-    margin: 0 auto;
+    grid-template-areas: ". cap" "video shot";
+    column-gap: clamp(20px, 3vw, 36px);
+    row-gap: 6px;
   }
+  .proof-media .proof-video { grid-area: video; }
+  .proof-media .ret-caption { grid-area: cap; margin: 0; }
+  @media (max-width: 760px) {
+    .proof-media { grid-template-columns: 1fr; grid-template-areas: "video" "cap" "shot"; }
+    .proof-media .ret-caption { margin-top: 14px; }
+  }
+  .proof-video {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border-radius: var(--r-lg);
+    overflow: hidden;
+    border: 1px solid var(--border-red);
+    box-shadow: 0 20px 60px rgba(255,21,21,0.15);
+    background: #000;
+  }
+  .proof-video button {
+    all: unset; cursor: pointer;
+    position: absolute; inset: 0;
+  }
+  .proof-video img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .6s var(--ease); }
+  .proof-video button:hover img { transform: scale(1.03); }
+  .proof-video button:focus-visible { outline: 2px solid var(--red); outline-offset: -2px; }
+  .pv-play {
+    position: absolute; inset: 0; margin: auto;
+    width: 68px; height: 68px;
+    display: grid; place-items: center;
+    border-radius: 50%;
+    color: #fff;
+    background: rgba(255,21,21,0.9);
+    box-shadow: 0 0 32px rgba(255,21,21,0.6);
+    transition: transform .3s var(--ease);
+  }
+  .proof-video button:hover .pv-play { transform: scale(1.08); }
+  .pv-dur {
+    position: absolute; right: 10px; bottom: 10px;
+    font-family: var(--font-body); font-size: 12px; font-weight: 600;
+    color: #fff; background: rgba(0,0,0,0.75);
+    padding: 2px 7px; border-radius: 4px;
+  }
+  .proof-video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+  .proof-views {
+    font-family: var(--font-head);
+    font-size: clamp(26px, 3vw, 36px);
+    font-weight: 800; line-height: 1;
+    letter-spacing: -0.03em;
+    background: linear-gradient(135deg, #FF6666, #FF1515);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    font-variant-numeric: tabular-nums;
+    margin: clamp(22px, 3vw, 30px) 0 6px;
+  }
+  /* Phrase sous les vues : information secondaire, plus discrète que le titre */
+  .ret-title {
+    font-family: var(--font-head);
+    font-size: clamp(15px, 1.5vw, 18px);
+    font-weight: 700; line-height: 1.3;
+    letter-spacing: -0.01em;
+    color: var(--text-muted);
+  }
+  .proof-msg {
+    display: block;
+    width: min(100%, 260px);
+    height: auto;
+    margin: 18px auto 0;
+    border-radius: var(--r-lg);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.5);
+  }
+  .proof-msg-cap {
+    font-family: var(--font-body);
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: 10px;
+  }
+  .ret-caption {
+    font-family: var(--font-body);
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: 8px;
+  }
+  /* Courbe de rétention : design d'origine des cartes (insight-half) */
   .insight-half {
     border-radius: var(--r-lg);
     padding: 20px 20px 18px;
     border: 1px solid var(--border);
     background: var(--surface);
   }
-  .insight-half.insight-bad  { border-color: rgba(255,21,21,0.22);   background: rgba(255,21,21,0.04); }
-  .insight-half.insight-good { border-color: rgba(34,197,94,0.22);   background: rgba(34,197,94,0.03); }
-  .comparison-badge {
-    display: inline-flex; align-items: center; gap: 6px;
-    font-family: var(--font-body); font-size: 10px; font-weight: 700;
-    letter-spacing: 0.1em; text-transform: uppercase;
-    padding: 4px 10px; border-radius: var(--r-pill);
-    margin-bottom: 14px;
-  }
-  .comparison-badge.bad  { color: var(--red);   background: rgba(255,21,21,0.1); border: 1px solid rgba(255,21,21,0.2); }
-  .comparison-badge.good { color: var(--green); background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.2); }
   .chart-canvas-wrap { position: relative; width: 100%; height: 130px; }
   .chart-canvas-wrap canvas { width: 100%; height: 100%; display: block; }
   .chart-axis {
@@ -683,15 +854,38 @@
     font-weight: 800; line-height: 1;
     letter-spacing: -0.03em;
   }
-  .chart-counter.bad  { color: var(--red);   text-shadow: 0 0 20px rgba(255,21,21,0.5); }
-  .chart-counter.good { color: var(--green); text-shadow: 0 0 20px rgba(34,197,94,0.5);  }
   .chart-counter-lbl {
     font-family: var(--font-body);
     font-size: 11px; color: var(--text-muted);
     letter-spacing: 0.07em; text-transform: uppercase;
     margin-top: 5px;
   }
-  @media (max-width: 600px) { .comparison-grid { grid-template-columns: 1fr; } }
+  /* Dans l'encadré Evann : même hauteur que la miniature, deux compteurs */
+  .ret-card {
+    grid-area: shot;
+    display: flex; flex-direction: column; align-items: flex-start;
+    padding: 14px 16px 12px;
+    /* même cadre que la miniature à côté */
+    border-color: var(--border-red);
+    background: #0b0508;
+    box-shadow: 0 20px 60px rgba(255,21,21,0.15);
+  }
+  .ret-card .chart-counter { color: var(--text); }
+  .ret-card .chart-canvas-wrap { flex: 1; height: auto; min-height: 60px; width: 100%; }
+  .ret-card .chart-canvas-wrap canvas { position: absolute; inset: 0; }
+  .ret-card .chart-axis { width: 100%; }
+  .ret-card .chart-counter-wrap {
+    width: 100%;
+    display: grid; grid-template-columns: 1fr 1fr;
+    margin: 0 0 10px; padding: 0 0 10px;
+    border-top: none;
+    border-bottom: 1px solid var(--border);
+  }
+  .ret-card .chart-counter { font-size: clamp(1.3rem, 2.4vw, 1.9rem); }
+  .ret-card .chart-counter-lbl { font-size: 9px; }
+  @media (max-width: 760px) { .ret-card .chart-canvas-wrap { flex: none; height: 120px; } }
+
+
 
   /* Episode dim on hover */
   .ep-grid:has(.ep-card:hover) .ep-card:not(:hover) {
@@ -772,72 +966,26 @@
   /* ═══════════════════════════════════════════
      PORTFOLIO
   ═══════════════════════════════════════════ */
-  #portfolio { background: var(--bg); }
-  .port-head { max-width: 680px; margin: 0 auto clamp(14px,2vw,24px); text-align: center; }
-  .port-sub { color: var(--text-muted); font-size: 15px; line-height: 1.65; margin-bottom: 22px; }
-
-  /* Motions button — spinning conic border (same as .btn-primary) */
-  .motions-btn-wrap {
-    --card-radius: var(--r-pill);
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: var(--card-radius);
-    cursor: pointer;
-    margin-bottom: clamp(32px,5vw,52px);
-    isolation: isolate;
-    overflow: visible;
-    box-shadow: 0 0 0 1.5px rgba(180,0,0,0.7), 0 0 24px rgba(255,21,21,0.2), 0 2px 10px rgba(0,0,0,0.45);
-    transition: box-shadow 0.36s ease, transform 0.26s var(--ease);
-  }
-  .motions-btn-wrap::before {
-    content: '';
-    position: absolute;
-    inset: -1.5px;
-    border-radius: inherit;
-    z-index: -1;
-    background: conic-gradient(from var(--ba, 0deg) at 50% 50%,
-      #160000 0deg, #160000 52deg,
-      #880000 70deg, #cc0000 82deg, #ff1515 90deg,
-      #ff5555 94deg, #ff1515 98deg, #cc0000 108deg,
-      #880000 120deg, #160000 138deg, #160000 360deg);
-    animation: spin-border 3.2s linear infinite;
-  }
-  .motions-btn-wrap::after {
-    content: '';
-    position: absolute;
-    inset: 1.5px;
-    border-radius: inherit;
-    background: #0d0000;
-    z-index: -1;
-  }
-  .motions-btn-wrap:hover {
-    transform: translateY(-2px);
-    box-shadow:
-      0 0 0 1.5px rgba(255,21,21,0.9),
-      0 0 18px rgba(255,21,21,0.65),
-      0 0 48px rgba(255,21,21,0.4),
-      0 6px 20px rgba(0,0,0,0.5);
-  }
-  .motions-btn-inner {
-    position: relative;
-    z-index: 1;
-    padding: 13px 28px;
-    font-family: var(--font-body);
-    font-size: 14px;
-    font-weight: 600;
+  /* Catégories de « Mon travail » */
+  .work-cat {
+    font-family: var(--font-head);
+    font-size: clamp(1.4rem, 2.6vw, 2rem);
+    font-weight: 800; letter-spacing: -0.03em;
     color: var(--text);
-    letter-spacing: 0.01em;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    transition: color 220ms;
+    text-align: center;
+    margin: clamp(32px, 4.5vw, 52px) 0 clamp(14px, 2vw, 20px);
   }
-  .motions-btn-wrap:hover .motions-btn-inner { color: var(--red-light); }
+  .sec-head + .work-cat { margin-top: 0; }
+  #portfolio .work-cat { margin-bottom: 8px; }
+  .work-cat-sub { text-align: center; }
+  .port-sub { color: var(--text-muted); font-size: 15px; line-height: 1.65; margin-bottom: 22px; }
 
   /* Episode grid */
   .ep-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+  /* 3 vidéos par rangée dans « Mon travail » */
+  #travail .ep-grid { grid-template-columns: repeat(3, 1fr); }
+  @media (max-width: 900px) { #travail .ep-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 560px) { #travail .ep-grid { grid-template-columns: 1fr; } }
 
   /* Spotlight cards */
   .sc {
@@ -928,19 +1076,11 @@
   }
   /* Motions section */
   .motions-head { text-align: center; margin: clamp(52px,8vw,88px) 0 32px; }
-  .motions-head h3 {
-    font-family: var(--font-head);
-    font-size: clamp(1.3rem,2.5vw,2rem);
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    margin-bottom: 10px;
-    color: var(--text);
-  }
   .motions-tagline {
     font-family: var(--font-body);
     font-size: clamp(13px,1.4vw,15px);
     color: var(--text-muted);
-    margin-top: 6px;
+    margin-top: 4px;
   }
 
   /* ── Video wrapper — même spin-border que btn-primary ── */
@@ -1087,16 +1227,6 @@
     grid-template-columns: 1fr 1fr;
     gap: clamp(40px, 6vw, 80px);
     align-items: center;
-    margin-bottom: clamp(52px, 8vw, 88px);
-  }
-  .story-h2 {
-    font-family: var(--font-head);
-    font-size: clamp(1.7rem, 3vw, 2.6rem);
-    font-weight: 800;
-    line-height: 1.1;
-    letter-spacing: -0.03em;
-    margin-bottom: clamp(20px, 3vw, 32px);
-    color: var(--text);
   }
   .story-p {
     font-family: var(--font-body);
@@ -1134,137 +1264,6 @@
     object-fit: cover;
     object-position: 50% 5%;
     filter: grayscale(15%) contrast(1.06);
-  }
-  .story-stat-badges {
-    position: absolute;
-    top: -16px; right: -16px;
-    display: flex;
-    flex-direction: column;
-    gap: 9px;
-  }
-  .stat-badge {
-    background: var(--bg);
-    border: 1px solid var(--border-2);
-    border-radius: var(--r-lg);
-    padding: 11px 15px;
-    text-align: center;
-    white-space: nowrap;
-  }
-  .stat-badge-num {
-    font-family: var(--font-head);
-    font-size: 1.4rem;
-    font-weight: 800;
-    color: var(--red);
-    line-height: 1;
-    text-shadow: 0 0 16px rgba(255,21,21,0.4);
-  }
-  .stat-badge-lbl {
-    font-family: var(--font-body);
-    font-size: 11px;
-    color: var(--text-muted);
-    margin-top: 2px;
-  }
-
-  /* Formations */
-  .formations-head {
-    text-align: center;
-    margin-bottom: 24px;
-  }
-  /* Auto-scroll marquee wrapper */
-  .formations-marquee-wrap {
-    overflow: hidden;
-    position: relative;
-    mask-image: linear-gradient(to right, transparent 0%, #000 8%, #000 92%, transparent 100%);
-    -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 8%, #000 92%, transparent 100%);
-  }
-  .formations-track {
-    display: flex;
-    gap: 16px;
-    width: max-content;
-    animation: formations-scroll 22s linear infinite;
-  }
-  .formations-track:hover { animation-play-state: paused; }
-  @keyframes formations-scroll {
-    from { transform: translateX(0); }
-    to   { transform: translateX(-50%); }
-  }
-  .tcard {
-    flex-shrink: 0;
-    width: 320px;
-    border: 1px solid var(--border);
-    border-radius: var(--r-lg);
-    padding: 22px;
-    background: var(--surface);
-    transition: border-color 0.3s var(--ease);
-  }
-  .tcard:hover { border-color: var(--border-red); }
-  .tcard-top {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 14px;
-  }
-  .tcard-photo {
-    width: 44px; height: 44px;
-    border-radius: 50%;
-    overflow: hidden;
-    flex-shrink: 0;
-    background: #1c0000;
-  }
-  .tcard-photo img { width: 100%; height: 100%; object-fit: cover; }
-  .tcard-name {
-    font-family: var(--font-head);
-    font-size: 14px;
-    font-weight: 700;
-    color: var(--text);
-    line-height: 1.2;
-  }
-  .tcard-role {
-    font-family: var(--font-body);
-    font-size: 11px;
-    font-weight: 700;
-    color: var(--red);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    margin-top: 2px;
-  }
-  .tcard-trustpilot {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    font-family: var(--font-body);
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--green);
-    margin-bottom: 8px;
-  }
-  .tcard-stars {
-    display: flex;
-    align-items: center;
-    gap: 3px;
-    margin-bottom: 12px;
-  }
-  .tcard-stars svg { width: 12px; height: 12px; }
-  .tcard-rating {
-    font-family: var(--font-body);
-    font-size: 11px;
-    color: var(--text-muted);
-    margin-left: 4px;
-  }
-  .tcard-palma {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    margin-top: 4px;
-  }
-  .tcard-palma span {
-    font-family: var(--font-body);
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--text-muted);
-    letter-spacing: 0.04em;
   }
 
   /* ═══════════════════════════════════════════
@@ -1567,23 +1566,10 @@
     .hero-inner { gap: clamp(6px, 1.2vh, 12px); }
     .hero-vsl { max-width: min(480px, 92vw); }
 
-    /* Stats inside hero */
-    .stats-row {
-      grid-template-columns: repeat(3, 1fr);
-      margin-left: calc(-1 * var(--px));
-      margin-right: calc(-1 * var(--px));
-    }
-    .stat-val { font-size: clamp(16px, 4.5vw, 26px); }
-    .stat-label { font-size: 10px; }
-    .stats-cell { padding: 14px 10px; }
 
     /* Episodes */
     .ep-grid { grid-template-columns: 1fr; }
 
-    /* Comparison charts */
-    .insight-half { padding: 16px 14px 14px; }
-    .chart-canvas-wrap { height: 90px; }
-    .chart-counter { font-size: clamp(1.4rem, 6vw, 2rem); }
 
     /* Motion video mobile */
     .motion-video-rainbow {
@@ -1599,8 +1585,6 @@
     .nle { overflow-x: auto; -webkit-overflow-scrolling: touch; }
     .nle-track-content { overflow-x: auto; }
 
-    /* Formations marquee */
-    .tcard { width: 260px; }
 
     /* Story */
     .story-stat { position: static; margin-top: 12px; display: inline-flex; }
@@ -1622,15 +1606,7 @@
     .hero-badge { font-size: 11px; padding: 6px 12px; }
     .hero-vsl { max-width: 100%; }
 
-    /* Stats en colonne sur très petit écran */
-    .stats-row { grid-template-columns: 1fr; }
-    .stats-cell { border-right: none; border-bottom: 1px solid var(--border); padding: 12px 16px; }
-    .stats-cell:last-child { border-bottom: none; }
-    .stat-val { font-size: clamp(20px, 6vw, 28px); }
 
-    /* Comparison — une colonne (déjà géré à 600px) */
-    .comparison-grid { grid-template-columns: 1fr; }
-    .chart-canvas-wrap { height: 80px; }
 
     /* Bouton glow */
     .btn-glow { padding: 12px 24px; font-size: 14px; }
@@ -1639,8 +1615,6 @@
     .nle-track-label  { width: 40px; font-size: 8px; }
     .nle-track-labels { width: 40px; }
 
-    /* Formations */
-    .tcard { width: 240px; }
 
     /* Footer */
     .foot { flex-direction: column; align-items: center; gap: 14px; text-align: center; }
@@ -1682,7 +1656,8 @@
   <nav id="mob-nav" role="navigation" aria-label="Menu mobile">
     <button class="mob-nav-close" onclick="closeNav()" aria-label="Fermer">✕</button>
     <a href="#hero"      onclick="closeNav()">Accueil</a>
-    <a href="#portfolio" onclick="closeNav()">Mon travail</a>
+    <a href="#problem" onclick="closeNav()">Preuves</a>
+    <a href="#travail" onclick="closeNav()">Mon travail</a>
     <a href="#story"     onclick="closeNav()">Qui je suis ?</a>
     <a href="#process"   onclick="closeNav()">Workflow</a>
     <a href="#" onclick="closeNav(); openContact(); return false;" class="accent">Me contacter</a>
@@ -1695,7 +1670,8 @@
         <a href="#hero" class="nav-logo" aria-label="Garbish">Gar<span>bish</span></a>
         <nav class="nav-links" aria-label="Navigation principale">
           <a href="#hero">Accueil</a>
-          <a href="#portfolio">Mon travail</a>
+          <a href="#problem">Preuves</a>
+          <a href="#travail">Mon travail</a>
           <a href="#story">Qui je suis ?</a>
           <a href="#process">Workflow</a>
         </nav>
@@ -1752,82 +1728,201 @@
 
     </div>
 
-    <!-- Stats bar — pleine largeur en bas du hero -->
-    <div class="stats-row ha ha-5" role="region" aria-label="Statistiques">
-      <div class="stats-cell fi fi-d1">
-        <div class="stat-val">1 an</div>
-        <div class="stat-label">de formation intensive</div>
-      </div>
-      <div class="stats-cell fi fi-d2">
-        <div class="stat-val">5 EP</div>
-        <div class="stat-label">de Vlog/Documentaires produits</div>
-      </div>
-      <div class="stats-cell fi fi-d3">
-        <div class="stat-val">3 formations</div>
-        <div class="stat-label">de perfectionnement</div>
-      </div>
-    </div>
+    <!-- Sommaire — pleine largeur en bas du hero -->
+    <nav class="hero-nav ha ha-5" aria-label="Aller à">
+      <a class="hn-cell fi fi-d1" href="#problem">
+        <span class="hn-title">Preuves</span>
+        <span class="hn-label">Je veux voir ça&nbsp;!<svg class="hn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12l7 7 7-7"/></svg></span>
+      </a>
+      <a class="hn-cell fi fi-d2" href="#travail">
+        <span class="hn-title">Mon travail</span>
+        <span class="hn-label">Ça aussi&nbsp;!<svg class="hn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12l7 7 7-7"/></svg></span>
+      </a>
+      <a class="hn-cell fi fi-d3" href="#motions">
+        <span class="hn-title">Motion design</span>
+        <span class="hn-label">Ça encore plus&nbsp;!<svg class="hn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12l7 7 7-7"/></svg></span>
+      </a>
+    </nav>
   </section>
 
 
   <!-- ── PROBLÈME ───────────────────────────── -->
-  <section id="problem" aria-label="Le problème">
+  <section id="problem" aria-label="Preuves">
     <div class="wrap">
       <div class="sec-head fi">
-        <div class="eyebrow">Le problème</div>
-        <h2 class="sec-h2">Tu crées du contenu. Mais <span class="grad">ça ne convertit pas.</span></h2>
-        <p class="sec-sub">La plupart des créateurs perdent 80% de leurs spectateurs dans les premières secondes. Ce n'est pas ton contenu. C'est ton montage.</p>
+        <h2 class="eyebrow chapter-title">Preuves</h2>
       </div>
-      <div class="comparison-grid fi fi-d1">
-        <!-- LEFT — Sans montage adapté -->
-        <div class="insight-half insight-bad sc">
-          <div class="comparison-badge bad">
-            <svg width="8" height="8" viewBox="0 0 8 8" fill="currentColor"><path d="M4 0l.94 2.87H8L5.53 4.64l.94 2.86L4 5.73l-2.47 1.77.94-2.86L0 2.87h3.06z"/></svg>
-            Sans montage adapté
+      <div class="proof fi fi-d1" id="proof" data-yt="znUUv2CDoiE">
+        <div class="proof-who">
+          <img class="proof-avatar" src="images/evann-profil.jpg" alt="" loading="lazy">
+          <span class="proof-id">
+            <span class="proof-name">Evann Chatraix</span>
+            <span class="proof-subs"><span data-live="subs" data-value="5450" data-from="800">5&nbsp;450</span> abonnés</span>
+          </span>
+        </div>
+        <h2 class="sec-h2 proof-title"><span class="pt-q">Evann avait <span class="grad">800</span> abonnés avant,</span><span class="pt-a">il est passé à <span class="grad-green">5&nbsp;450 en une vidéo.</span></span></h2>
+        <div class="proof-media">
+          <div class="proof-video">
+            <button type="button" class="proof-play" aria-label="Lire la vidéo « Ils vous ont B*isé » d'Evann Chatraix">
+              <img src="images/evann-ils-vous-ont.jpg" alt="" loading="lazy">
+              <span class="pv-play" aria-hidden="true"><svg viewBox="0 0 24 24" width="26" height="26"><path d="M8 5v14l11-7z" fill="currentColor"/></svg></span>
+              <span class="pv-dur">13:53</span>
+            </button>
           </div>
-          <div class="chart-canvas-wrap"><canvas id="chart-bad"></canvas></div>
-          <div class="chart-axis">
-            <span>0s</span><span>Temps de visionnage →</span><span>100%</span>
-          </div>
-          <div class="chart-counter-wrap">
-            <div class="chart-counter bad" id="counter-bad">0%</div>
-            <div class="chart-counter-lbl">de rétention moyenne</div>
+          <div class="ret-caption">Données YouTube Studio</div>
+          <div class="insight-half ret-card">
+            <div class="chart-counter-wrap">
+              <div>
+                <div class="chart-counter" data-count-dur="346">5:46</div>
+                <div class="chart-counter-lbl">durée moyenne d'une vue</div>
+              </div>
+              <div>
+                <div class="chart-counter" data-count-ret="41.6">41,6&nbsp;%</div>
+                <div class="chart-counter-lbl">de rétention moyenne</div>
+              </div>
+            </div>
+            <div class="chart-canvas-wrap"><canvas data-points="88.8,85.6,79.8,75.6,73.7,70.2,58.5,57.1,56.1,55.3,55.1,55.0,55.1,53.7,52.4,51.2,50.7,49.9,49.5,49.5,47.9,48.3,48.3,48.3,48.3,47.8,47.6,47.4,47.3,47.4,47.6,47.3,47.0,46.3,46.3,46.3,46.3,46.3,46.3,46.3,45.9,44.8,44.7,44.6,44.5,44.4,43.9,42.9,43.1,43.3,43.4,43.6,43.8,43.5,42.7,42.4,42.4,42.9,42.0,42.0,42.0,42.0,42.0,42.0,42.0,40.5,40.5,40.5,41.0,40.5,40.5,40.5,40.5,40.0,39.0,39.0,39.0,39.0,39.0,39.0,39.5,38.4,38.5,38.5,38.5,38.5,38.0,37.9,37.6,37.4,37.2,37.1,37.1,37.1,37.1,36.6,36.6,36.6,36.6,36.6,36.6,36.1,36.1,36.1,36.1,36.1,35.2,34.6,34.6,34.6,34.1,33.7,33.9,32.7,32.7,32.4,31.2,30.7,29.6,28.9,25.4" role="img" aria-label="Courbe de rétention de la vidéo : environ 89 % au départ, 55 % après une minute, encore 25 % à la fin"></canvas></div>
+            <div class="chart-axis">
+              <span>0:00</span><span>Temps de visionnage →</span><span>13:53</span>
+            </div>
           </div>
         </div>
-        <!-- RIGHT — Avec montage adapté -->
-        <div class="insight-half insight-good sc">
-          <div class="comparison-badge good">
-            <svg width="8" height="8" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 5l3 3 5-6"/></svg>
-            Avec montage adapté
+        <div class="proof-views"><span data-live="views" data-value="430599">430&nbsp;599</span> vues</div>
+        <div class="ret-text">
+          <h3 class="ret-title">Avec plus de <span class="grad">40&nbsp;%</span> de rétention&nbsp;!!!</h3>
+        </div>
+      </div>
+      <div class="proof fi" id="proof-leo" data-yt="NuYFnGlVFzA">
+        <div class="proof-who">
+          <img class="proof-avatar" src="images/leo-profil.jpg" alt="" loading="lazy">
+          <span class="proof-id">
+            <span class="proof-name">Léo Grindars</span>
+            <span class="proof-subs"><span data-live="subs" data-value="11200">11&nbsp;200</span> abonnés</span>
+          </span>
+        </div>
+        <h2 class="sec-h2 proof-title"><span class="pt-q">Une VSL YouTube pour Léo,</span><span class="pt-a">plus de <span class="grad-green">40&nbsp;000 vues.</span></span></h2>
+        <div class="proof-media">
+          <div class="proof-video">
+            <button type="button" class="proof-play" aria-label="Lire la vidéo « La NOUVELLE ère des SaaS est arrivée » de Léo Grindars">
+              <img src="images/leo-nouvelle-ere-saas.jpg" alt="" loading="lazy">
+              <span class="pv-play" aria-hidden="true"><svg viewBox="0 0 24 24" width="26" height="26"><path d="M8 5v14l11-7z" fill="currentColor"/></svg></span>
+              <span class="pv-dur">6:55</span>
+            </button>
           </div>
-          <div class="chart-canvas-wrap"><canvas id="chart-good"></canvas></div>
-          <div class="chart-axis">
-            <span>0s</span><span>Temps de visionnage →</span><span>100%</span>
+          <div class="ret-caption">Données YouTube Studio</div>
+          <div class="insight-half ret-card">
+            <div class="chart-counter-wrap">
+              <div>
+                <div class="chart-counter" data-count-dur="173">2:53</div>
+                <div class="chart-counter-lbl">durée moyenne d'une vue</div>
+              </div>
+              <div>
+                <div class="chart-counter" data-count-ret="41.7">41,7&nbsp;%</div>
+                <div class="chart-counter-lbl">de rétention moyenne</div>
+              </div>
+            </div>
+            <div class="chart-canvas-wrap"><canvas data-points="92.3,85.3,82.0,77.9,74.5,71.6,68.6,65.7,63.5,62.6,60.9,59.0,58.1,57.4,56.5,55.8,55.3,54.8,54.2,53.8,53.3,53.1,52.7,51.7,51.7,51.4,50.7,50.3,50.0,49.8,48.6,48.6,48.3,48.0,48.0,47.6,48.0,47.6,47.4,47.4,47.4,47.3,46.9,46.9,46.5,46.0,45.6,46.2,45.7,45.2,44.9,44.9,44.2,44.2,44.2,44.2,44.1,43.7,43.6,43.2,43.2,42.8,42.6,43.0,42.5,42.5,42.5,42.2,41.8,41.8,41.8,41.8,41.5,41.1,41.1,41.1,41.1,40.4,39.9,39.9,39.9,39.9,39.9,39.6,39.6,39.8,39.4,39.4,39.4,39.4,38.9,38.1,37.4,37.0,36.7,36.7,36.7,36.3,36.2,35.7,35.7,35.3,34.8,34.3,33.8,33.3,32.9,32.9,32.3,31.9,31.3,30.9,30.2,29.8,29.2,28.8,27.7,26.8,25.5,23.7,21.8" role="img" aria-label="Courbe de rétention de la vidéo : environ 92 % au départ, 63 % à 30 secondes, encore 22 % à la fin"></canvas></div>
+            <div class="chart-axis">
+              <span>0:00</span><span>Temps de visionnage →</span><span>6:55</span>
+            </div>
           </div>
-          <div class="chart-counter-wrap">
-            <div class="chart-counter good" id="counter-good">0%</div>
-            <div class="chart-counter-lbl">de rétention moyenne</div>
-          </div>
+        </div>
+        <div class="proof-views"><span data-live="views" data-value="40571">40&nbsp;571</span> vues</div>
+        <div class="ret-text">
+          <h3 class="ret-title">Une VSL qui retient, et qui convertit.</h3>
+          <img class="proof-msg" src="images/leo-message.png" alt="Message WhatsApp du head of content de Léo : « Ouais franchement on est content de comment elle convertit. »" loading="lazy">
+          <div class="proof-msg-cap">Message du head of content de Léo</div>
         </div>
       </div>
     </div>
   </section>
 
   <!-- ── PORTFOLIO ──────────────────────────── -->
-  <section id="portfolio" aria-label="Mon travail">
+  <section id="travail" aria-label="Mon travail">
     <div class="wrap">
-      <div class="port-head fi">
-        <div class="eyebrow" style="justify-content:center;display:flex">Mon travail</div>
-        <h2 class="sec-h2 fi fi-d1">Mes propres <span class="grad">Vlog/Documentaires</span></h2>
-        <p class="port-sub fi fi-d2">Ces vidéos sont mes propres Vlog/Documentaires, conçus, montés et designés seul.</p>
-        <div style="display:flex;justify-content:center" class="fi fi-d3">
-          <button class="motions-btn-wrap" onclick="document.getElementById('motions').scrollIntoView({behavior:'smooth'})" aria-label="Voir mes motions">
-            <div class="motions-btn-inner">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-              Voir mes motions
-            </div>
-          </button>
+      <div class="sec-head fi">
+        <h2 class="eyebrow chapter-title">Mon travail</h2>
+        <p class="sec-sub">De la VSL au vlog, je m'adapte à ton format.</p>
+        <div class="btn-glow-wrap work-to-motion"><a class="btn-glow" href="#motions">Voir le motion design</a></div>
+      </div>
+      <!-- Projets clients -->
+      <h3 class="work-cat fi">Facecam / VSL</h3>
+      <div class="ep-grid">
+        <div data-ytid="znUUv2CDoiE" class="ep-card sc fi fi-d1" role="button" tabindex="0" aria-label="Lire « Ils vous ont B*isé »">
+          <div class="ep-thumb">
+            <div class="ep-bg g1"></div>
+            <img class="ep-thumb-img" src="images/evann-ils-vous-ont.jpg" alt="Ils vous ont B*isé" loading="lazy" onerror="this.style.display='none'">
+            <div class="ep-tag">YouTube</div>
+            <div class="ep-play-btn"><svg width="12" height="12" viewBox="0 0 12 12" fill="white"><path d="M3 2l7 4-7 4V2z"/></svg></div>
+            <div class="ep-dur">13:53</div>
+          </div>
+          <div class="ep-info">
+            <div class="ep-num">Evann Chatraix · Vidéo YouTube</div>
+            <h3 class="ep-title">Ils vous ont B*isé</h3>
+          </div>
         </div>
+        <div data-ytid="NuYFnGlVFzA" class="ep-card sc fi fi-d2" role="button" tabindex="0" aria-label="Lire « La NOUVELLE ère des SaaS est arrivée (by LPS.Studio) »">
+          <div class="ep-thumb">
+            <div class="ep-bg g1"></div>
+            <img class="ep-thumb-img" src="images/leo-nouvelle-ere-saas.jpg" alt="La NOUVELLE ère des SaaS est arrivée (by LPS.Studio)" loading="lazy" onerror="this.style.display='none'">
+            <div class="ep-tag">VSL</div>
+            <div class="ep-play-btn"><svg width="12" height="12" viewBox="0 0 12 12" fill="white"><path d="M3 2l7 4-7 4V2z"/></svg></div>
+            <div class="ep-dur">6:55</div>
+          </div>
+          <div class="ep-info">
+            <div class="ep-num">Léo Grindars · VSL YouTube</div>
+            <h3 class="ep-title">La NOUVELLE ère des SaaS est arrivée (by LPS.Studio)</h3>
+          </div>
+        </div>
+        <div data-ytid="ZguXiXDmLjQ" class="ep-card sc fi fi-d3" role="button" tabindex="0" aria-label="Lire « Du RSA à 100.000€ en 1 an grâce au Marketing Digital »">
+          <div class="ep-thumb">
+            <div class="ep-bg g1"></div>
+            <img class="ep-thumb-img" src="images/remy-rsa-100k.jpg" alt="Du RSA à 100.000€ en 1 an grâce au Marketing Digital" loading="lazy" onerror="this.style.display='none'">
+            <div class="ep-tag">YouTube</div>
+            <div class="ep-play-btn"><svg width="12" height="12" viewBox="0 0 12 12" fill="white"><path d="M3 2l7 4-7 4V2z"/></svg></div>
+            <div class="ep-dur">13:22</div>
+          </div>
+          <div class="ep-info">
+            <div class="ep-num">Rémy Digit · Vidéo YouTube</div>
+            <h3 class="ep-title">Du RSA à 100.000€ en 1 an grâce au Marketing Digital</h3>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="work-cat fi">Vlog</h3>
+      <div class="ep-grid">
+        <div data-ytid="zr_Fr6M8muQ" class="ep-card sc fi fi-d1" role="button" tabindex="0" aria-label="Lire « Je me suis Lock-in 2 semaine en Belgique pour faire 300k€ - SaaS Founder #5 »">
+          <div class="ep-thumb">
+            <div class="ep-bg g1"></div>
+            <img class="ep-thumb-img" src="images/leo-vlog-belgique.jpg" alt="Je me suis Lock-in 2 semaine en Belgique pour faire 300k€ - SaaS Founder #5" loading="lazy" onerror="this.style.display='none'">
+            <div class="ep-tag">Vlog</div>
+            <div class="ep-play-btn"><svg width="12" height="12" viewBox="0 0 12 12" fill="white"><path d="M3 2l7 4-7 4V2z"/></svg></div>
+            <div class="ep-dur">18:52</div>
+          </div>
+          <div class="ep-info">
+            <div class="ep-num">Léo Grindars · Vlog YouTube</div>
+            <h3 class="ep-title">Je me suis Lock-in 2 semaine en Belgique pour faire 300k€ - SaaS Founder #5</h3>
+          </div>
+        </div>
+        <div data-ytid="22qtLk-NWr8" class="ep-card sc fi fi-d2" role="button" tabindex="0" aria-label="Lire « 7 jours pour créer 2 Applications avec ma team en Suisse »">
+          <div class="ep-thumb">
+            <div class="ep-bg g1"></div>
+            <img class="ep-thumb-img" src="images/leo-vlog-suisse.jpg" alt="7 jours pour créer 2 Applications avec ma team en Suisse" loading="lazy" onerror="this.style.display='none'">
+            <div class="ep-tag">Vlog</div>
+            <div class="ep-play-btn"><svg width="12" height="12" viewBox="0 0 12 12" fill="white"><path d="M3 2l7 4-7 4V2z"/></svg></div>
+            <div class="ep-dur">41:44</div>
+          </div>
+          <div class="ep-info">
+            <div class="ep-num">Léo Grindars · Vlog YouTube</div>
+            <h3 class="ep-title">7 jours pour créer 2 Applications avec ma team en Suisse</h3>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mes propres Vlogs/Documentaires -->
+      <div class="fi" id="portfolio">
+        <h3 class="work-cat">Projet perso</h3>
+        <p class="port-sub work-cat-sub">Ces vidéos sont mes propres Vlog/Documentaires, conçus, montés et designés seul.</p>
       </div>
 
       <div class="ep-grid">
@@ -1905,9 +2000,8 @@
 
       <!-- Motions -->
       <div id="motions" class="motions-head fi">
-        <div class="eyebrow" style="justify-content:center;display:flex">Motion design</div>
-        <h3>Quelques motions issus de ces vidéos</h3>
-        <p class="motions-tagline">Rends tes idées réelles !</p>
+        <h2 class="eyebrow chapter-title">Motion design</h2>
+        <p class="motions-tagline">Quelques motions issus de ces vidéos</p>
       </div>
 
       <!-- Vidéo motion en boucle -->
@@ -1940,167 +2034,20 @@
   <!-- ── QUI JE SUIS ? ──────────────────────── -->
   <section id="story" aria-label="Qui je suis ?">
     <div class="wrap">
+      <div class="sec-head fi">
+        <h2 class="eyebrow chapter-title">Qui je suis ?</h2>
+      </div>
       <div class="story-grid">
         <!-- Left: copy -->
         <div>
-          <div class="eyebrow fi">Qui je suis ?</div>
-          <h2 class="story-h2 fi fi-d1">Pourquoi je quitte tout <span class="grad">à 23 ans ?</span></h2>
-          <p class="story-p fi fi-d2">Avant de savoir pourquoi, tu dois d'abord savoir qui je suis. Je m'appelle Gabriel, un jeune belge de 23 ans, et il y a un an, j'ai décidé d'apprendre le montage pour <strong>quitter mon ancien job et devenir ton bras droit créatif.</strong></p>
-          <p class="story-p fi fi-d3">J'ai suivi pendant près d'un an plusieurs formations basées sur le montage, le storytelling et le motion design. Après de nombreux soucis contractuels pour quitter mon ancien travail, <strong>je suis aujourd'hui en capacité de proposer mes services</strong> et à la recherche de mes premiers clients.</p>
+          <p class="story-p fi fi-d2">Je m'appelle Gabriel, un jeune belge de 23 ans. Il y a un an, j'ai décidé d'apprendre le montage vidéo pour <strong>quitter mon ancien job et devenir ton bras droit créatif.</strong></p>
+          <p class="story-p fi fi-d3">J'ai suivi pendant près d'un an plusieurs formations basées sur le montage, le storytelling et le motion design. Devenu passionné en pratiquant sur mes propres vlogs/documentaires, <strong>je vends aujourd'hui mes services.</strong></p>
         </div>
         <!-- Right: photo -->
         <div class="story-img-col fi fi-d2">
           <div class="story-photo-wrap">
             <div class="story-photo">
               <img src="images/photo-2.jpg" alt="Gabriel, Monteur vidéo" onerror="this.style.display='none'">
-            </div>
-          </div>
-          <div class="story-stat-badges">
-            <div class="stat-badge">
-              <div class="stat-badge-num">1 an</div>
-              <div class="stat-badge-lbl">de formation</div>
-            </div>
-            <div class="stat-badge">
-              <div class="stat-badge-num">5 EP</div>
-              <div class="stat-badge-lbl">Vlog/Documentaire</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Formations -->
-      <div class="formations-head fi">
-        <div class="eyebrow" style="justify-content:center;display:flex">Formations suivies</div>
-      </div>
-      <div class="formations-marquee-wrap">
-        <div class="formations-track">
-          <!-- ─── SET 1 ─── -->
-          <!-- Marc Eksuzyan -->
-          <div class="tcard">
-            <div class="tcard-top">
-              <div class="tcard-photo">
-                <img src="images/marc-eksuzyan.jpg" alt="Marc Eksuzyan" onerror="this.style.display='none'">
-              </div>
-              <div>
-                <div class="tcard-name">Marc Eksuzyan</div>
-                <div class="tcard-role">Crack Editing</div>
-              </div>
-            </div>
-            <div class="tcard-trustpilot">
-              <svg width="10" height="10" viewBox="0 0 24 24" fill="#22C55E"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-              Trustpilot
-            </div>
-            <div class="tcard-stars">
-              <svg viewBox="0 0 20 20" fill="#22C55E"><path d="M10 1l2.4 7.2H20l-6.2 4.5 2.4 7.2L10 15.4l-6.2 4.5 2.4-7.2L0 8.2h7.6z"/></svg>
-              <svg viewBox="0 0 20 20" fill="#22C55E"><path d="M10 1l2.4 7.2H20l-6.2 4.5 2.4 7.2L10 15.4l-6.2 4.5 2.4-7.2L0 8.2h7.6z"/></svg>
-              <svg viewBox="0 0 20 20" fill="#22C55E"><path d="M10 1l2.4 7.2H20l-6.2 4.5 2.4 7.2L10 15.4l-6.2 4.5 2.4-7.2L0 8.2h7.6z"/></svg>
-              <svg viewBox="0 0 20 20" fill="#22C55E"><path d="M10 1l2.4 7.2H20l-6.2 4.5 2.4 7.2L10 15.4l-6.2 4.5 2.4-7.2L0 8.2h7.6z"/></svg>
-              <svg viewBox="0 0 20 20" fill="#22C55E" style="opacity:.75"><path d="M10 1l2.4 7.2H20l-6.2 4.5 2.4 7.2L10 15.4l-6.2 4.5 2.4-7.2L0 8.2h7.6z"/></svg>
-              <span class="tcard-rating">4.8 · 41 avis</span>
-            </div>
-          </div>
-          <!-- Sam -->
-          <div class="tcard">
-            <div class="tcard-top">
-              <div class="tcard-photo">
-                <img src="images/sami.jpeg" alt="Sami, Editing 360" onerror="this.style.display='none'">
-              </div>
-              <div>
-                <div class="tcard-name">Sami</div>
-                <div class="tcard-role">Editing 360</div>
-              </div>
-            </div>
-            <div class="tcard-trustpilot">
-              <svg width="10" height="10" viewBox="0 0 24 24" fill="#22C55E"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-              Trustpilot
-            </div>
-            <div class="tcard-stars">
-              <svg viewBox="0 0 20 20" fill="#22C55E"><path d="M10 1l2.4 7.2H20l-6.2 4.5 2.4 7.2L10 15.4l-6.2 4.5 2.4-7.2L0 8.2h7.6z"/></svg>
-              <svg viewBox="0 0 20 20" fill="#22C55E"><path d="M10 1l2.4 7.2H20l-6.2 4.5 2.4 7.2L10 15.4l-6.2 4.5 2.4-7.2L0 8.2h7.6z"/></svg>
-              <svg viewBox="0 0 20 20" fill="#22C55E"><path d="M10 1l2.4 7.2H20l-6.2 4.5 2.4 7.2L10 15.4l-6.2 4.5 2.4-7.2L0 8.2h7.6z"/></svg>
-              <svg viewBox="0 0 20 20" fill="#22C55E"><path d="M10 1l2.4 7.2H20l-6.2 4.5 2.4 7.2L10 15.4l-6.2 4.5 2.4-7.2L0 8.2h7.6z"/></svg>
-              <svg viewBox="0 0 20 20" fill="#22C55E"><path d="M10 1l2.4 7.2H20l-6.2 4.5 2.4 7.2L10 15.4l-6.2 4.5 2.4-7.2L0 8.2h7.6z"/></svg>
-              <span class="tcard-rating">4.9 · 336 avis</span>
-            </div>
-          </div>
-          <!-- Cyrille Declinat -->
-          <div class="tcard">
-            <div class="tcard-top">
-              <div class="tcard-photo">
-                <img src="images/cyrille-declinat.jpg" alt="Cyrille Declinat" onerror="this.style.display='none'">
-              </div>
-              <div>
-                <div class="tcard-name">Cyrille Declinat</div>
-                <div class="tcard-role">Secret de Monteur Pro</div>
-              </div>
-            </div>
-            <div class="tcard-palma">
-              <span>◆ +25 ans d'expérience</span>
-              <span>◆ France Télévisions</span>
-              <span>◆ Canal+</span>
-            </div>
-          </div>
-          <!-- ─── SET 2 (duplicate for seamless loop) ─── -->
-          <div class="tcard">
-            <div class="tcard-top">
-              <div class="tcard-photo">
-                <img src="images/marc-eksuzyan.jpg" alt="Marc Eksuzyan" onerror="this.style.display='none'">
-              </div>
-              <div>
-                <div class="tcard-name">Marc Eksuzyan</div>
-                <div class="tcard-role">Crack Editing</div>
-              </div>
-            </div>
-            <div class="tcard-trustpilot">
-              <svg width="10" height="10" viewBox="0 0 24 24" fill="#22C55E"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-              Trustpilot
-            </div>
-            <div class="tcard-stars">
-              <svg viewBox="0 0 20 20" fill="#22C55E"><path d="M10 1l2.4 7.2H20l-6.2 4.5 2.4 7.2L10 15.4l-6.2 4.5 2.4-7.2L0 8.2h7.6z"/></svg>
-              <svg viewBox="0 0 20 20" fill="#22C55E"><path d="M10 1l2.4 7.2H20l-6.2 4.5 2.4 7.2L10 15.4l-6.2 4.5 2.4-7.2L0 8.2h7.6z"/></svg>
-              <svg viewBox="0 0 20 20" fill="#22C55E"><path d="M10 1l2.4 7.2H20l-6.2 4.5 2.4 7.2L10 15.4l-6.2 4.5 2.4-7.2L0 8.2h7.6z"/></svg>
-              <svg viewBox="0 0 20 20" fill="#22C55E"><path d="M10 1l2.4 7.2H20l-6.2 4.5 2.4 7.2L10 15.4l-6.2 4.5 2.4-7.2L0 8.2h7.6z"/></svg>
-              <svg viewBox="0 0 20 20" fill="#22C55E" style="opacity:.75"><path d="M10 1l2.4 7.2H20l-6.2 4.5 2.4 7.2L10 15.4l-6.2 4.5 2.4-7.2L0 8.2h7.6z"/></svg>
-              <span class="tcard-rating">4.8 · 41 avis</span>
-            </div>
-          </div>
-          <div class="tcard">
-            <div class="tcard-top">
-              <div class="tcard-photo">
-                <img src="images/sami.jpeg" alt="Sami, Editing 360" onerror="this.style.display='none'">
-              </div>
-              <div>
-                <div class="tcard-name">Sami</div>
-                <div class="tcard-role">Editing 360</div>
-              </div>
-            </div>
-            <div class="tcard-trustpilot">
-              <svg width="10" height="10" viewBox="0 0 24 24" fill="#22C55E"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-              Trustpilot
-            </div>
-            <div class="tcard-stars">
-              <svg viewBox="0 0 20 20" fill="#22C55E"><path d="M10 1l2.4 7.2H20l-6.2 4.5 2.4 7.2L10 15.4l-6.2 4.5 2.4-7.2L0 8.2h7.6z"/></svg>
-              <svg viewBox="0 0 20 20" fill="#22C55E"><path d="M10 1l2.4 7.2H20l-6.2 4.5 2.4 7.2L10 15.4l-6.2 4.5 2.4-7.2L0 8.2h7.6z"/></svg>
-              <svg viewBox="0 0 20 20" fill="#22C55E"><path d="M10 1l2.4 7.2H20l-6.2 4.5 2.4 7.2L10 15.4l-6.2 4.5 2.4-7.2L0 8.2h7.6z"/></svg>
-              <svg viewBox="0 0 20 20" fill="#22C55E"><path d="M10 1l2.4 7.2H20l-6.2 4.5 2.4 7.2L10 15.4l-6.2 4.5 2.4-7.2L0 8.2h7.6z"/></svg>
-              <svg viewBox="0 0 20 20" fill="#22C55E"><path d="M10 1l2.4 7.2H20l-6.2 4.5 2.4 7.2L10 15.4l-6.2 4.5 2.4-7.2L0 8.2h7.6z"/></svg>
-              <span class="tcard-rating">4.9 · 336 avis</span>
-            </div>
-          </div>
-          <div class="tcard">
-            <div class="tcard-top">
-              <div class="tcard-photo">
-                <img src="images/cyrille-declinat.jpg" alt="Cyrille Declinat" onerror="this.style.display='none'">
-              </div>
-              <div>
-                <div class="tcard-name">Cyrille Declinat</div>
-                <div class="tcard-role">Secret de Monteur Pro</div>
-              </div>
-            </div>
-            <div class="tcard-palma">
-              <span>◆ +25 ans d'expérience</span>
-              <span>◆ France Télévisions</span>
-              <span>◆ Canal+</span>
             </div>
           </div>
         </div>
@@ -2348,68 +2295,69 @@ function closeContact() {
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeContact(); });
 
 /* ══════════════════════════════════════════
-   COMPARISON CHARTS — dual canvas draw animation
+   PREUVES EN DIRECT — un encadré .proof[data-yt] par vidéo client
+   · vues de la vidéo + abonnés de la chaîne, rafraîchis via /api/yt
+     (les valeurs du HTML servent de repli)
+   · courbe de rétention (vraies données YouTube Studio) tracée à l'apparition
+   · miniature remplacée par le lecteur YouTube au clic
 ══════════════════════════════════════════ */
 (function() {
-  function lerp(a, b, t) { return a + (b - a) * t; }
-  function easeOut3(t) { return 1 - Math.pow(1 - t, 3); }
+  const fmt = n => Math.round(n).toLocaleString('fr-FR').replace(/\u202f/g, '\u00a0');
+  const easeOut3 = t => 1 - Math.pow(1 - t, 3);
 
-  // Control points for bezier segments
-  // bad: drops fast at start
-  const badPts  = [[0,95],[6,50],[16,28],[30,18],[50,12],[75,9],[100,6]];
-  // good: stays high
-  const goodPts = [[0,95],[6,88],[16,78],[30,68],[50,58],[75,48],[100,38]];
-
-  // Sample N points along the bezier path defined by control knots
-  function samplePath(pts, N) {
-    const result = [];
-    const segs = pts.length - 1;
-    for (let s = 0; s < segs; s++) {
-      const p0 = pts[s], p1 = pts[s+1];
-      const cp1x = p0[0] + (p1[0] - p0[0]) * 0.45;
-      const cp1y = p0[1];
-      const cp2x = p1[0] - (p1[0] - p0[0]) * 0.45;
-      const cp2y = p1[1];
-      const steps = Math.ceil(N / segs);
-      for (let i = 0; i <= steps; i++) {
-        const t = i / steps;
-        const mt = 1 - t;
-        const x = mt*mt*mt*p0[0] + 3*mt*mt*t*cp1x + 3*mt*t*t*cp2x + t*t*t*p1[0];
-        const y = mt*mt*mt*p0[1] + 3*mt*mt*t*cp1y + 3*mt*t*t*cp2y + t*t*t*p1[1];
-        result.push([x, y]);
-      }
-    }
-    return result;
+  function tween(state, el, to, dur) {
+    const from = state.shown, t0 = performance.now();
+    (function step(now) {
+      const t = Math.min(1, (now - t0) / dur);
+      state.shown = from + (to - from) * easeOut3(t);
+      el.textContent = fmt(state.shown);
+      if (t < 1) requestAnimationFrame(step);
+    })(t0);
   }
 
-  function makeChart(canvasId, counterId, pts, color, colorA, counterTarget) {
-    const canvas  = document.getElementById(canvasId);
-    const counter = document.getElementById(counterId);
-    if (!canvas) return;
+  // Compteur qui part de `start` quand il apparaît, puis suit les nouvelles valeurs
+  function liveCounter(el, start, dur) {
+    const state = { value: +el.dataset.value, shown: start, started: false };
+    const obs = new IntersectionObserver(entries => {
+      if (!entries[0].isIntersecting) return;
+      obs.disconnect();
+      state.started = true;
+      el.textContent = fmt(start);
+      tween(state, el, state.value, dur);
+    }, { threshold: 0.5 });
+    obs.observe(el);
+    return v => {
+      if (!(v > 0) || v === state.value) return;
+      state.value = v;
+      if (state.started) tween(state, el, v, 1200);
+    };
+  }
+
+  function retentionChart(canvas) {
+    const card = canvas.closest('.ret-card');
     const ctx = canvas.getContext('2d');
-    const sampled = samplePath(pts, 200);
-    let animFrame, started = false, lastT = 0;
+    const DATA = canvas.dataset.points.split(',').map(Number);
+    const pts = DATA.map((y, i) => [i * 100 / (DATA.length - 1), y]);
+    const counterRet = card.querySelector('[data-count-ret]');
+    const counterDur = card.querySelector('[data-count-dur]');
+    const RET = +counterRet.dataset.countRet, DUR = +counterDur.dataset.countDur;
+    const COLOR = '#22C55E', COLOR_A = 'rgba(34,197,94,';
+    let started = false, lastT = 0;
 
     function resize() {
       const r = canvas.parentElement.getBoundingClientRect();
       canvas.width  = r.width  * devicePixelRatio;
       canvas.height = r.height * devicePixelRatio;
-      ctx.scale(devicePixelRatio, devicePixelRatio);
+      ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
     }
 
     function draw(t) {
-      const W = canvas.width  / devicePixelRatio;
-      const H = canvas.height / devicePixelRatio;
+      const W = canvas.width / devicePixelRatio, H = canvas.height / devicePixelRatio;
       ctx.clearRect(0, 0, W, H);
-
       const mapX = x => (x / 100) * W;
       const mapY = y => H - (y / 100) * H;
+      const endIdx = Math.max(1, Math.floor(t * pts.length));
 
-      // How many sampled points to draw (draw-itself effect via clip)
-      const total  = sampled.length;
-      const endIdx = Math.max(1, Math.floor(t * total));
-
-      // Grid lines
       ctx.strokeStyle = 'rgba(255,255,255,0.05)';
       ctx.lineWidth = 1;
       for (let i = 1; i <= 3; i++) {
@@ -2417,97 +2365,94 @@ document.addEventListener('keydown', e => { if (e.key === 'Escape') closeContact
         ctx.beginPath(); ctx.moveTo(0, yg); ctx.lineTo(W, yg); ctx.stroke();
       }
 
-      // Clip to the drawn portion
-      ctx.save();
-      const clipX = mapX(sampled[endIdx - 1][0]);
-      ctx.beginPath();
-      ctx.rect(0, 0, clipX + 4, H);
-      ctx.clip();
+      const path = () => {
+        ctx.beginPath();
+        ctx.moveTo(mapX(pts[0][0]), mapY(pts[0][1]));
+        for (let i = 1; i < endIdx; i++) ctx.lineTo(mapX(pts[i][0]), mapY(pts[i][1]));
+      };
 
-      // Fill under curve
-      ctx.beginPath();
-      ctx.moveTo(mapX(sampled[0][0]), mapY(sampled[0][1]));
-      for (let i = 1; i < endIdx; i++) {
-        ctx.lineTo(mapX(sampled[i][0]), mapY(sampled[i][1]));
-      }
-      ctx.lineTo(mapX(sampled[endIdx - 1][0]), H);
-      ctx.lineTo(mapX(sampled[0][0]), H);
+      path();
+      ctx.lineTo(mapX(pts[endIdx - 1][0]), H);
+      ctx.lineTo(mapX(pts[0][0]), H);
       ctx.closePath();
       const grad = ctx.createLinearGradient(0, 0, 0, H);
-      grad.addColorStop(0, colorA + '0.22)');
-      grad.addColorStop(1, colorA + '0.02)');
+      grad.addColorStop(0, COLOR_A + '0.22)');
+      grad.addColorStop(1, COLOR_A + '0.02)');
       ctx.fillStyle = grad;
       ctx.fill();
 
-      // Stroke
-      ctx.beginPath();
-      ctx.moveTo(mapX(sampled[0][0]), mapY(sampled[0][1]));
-      for (let i = 1; i < endIdx; i++) {
-        ctx.lineTo(mapX(sampled[i][0]), mapY(sampled[i][1]));
-      }
-      ctx.strokeStyle = color;
+      path();
+      ctx.strokeStyle = COLOR;
       ctx.lineWidth = 2.5;
-      ctx.lineJoin = 'round';
-      ctx.lineCap  = 'round';
-      ctx.shadowColor = color;
-      ctx.shadowBlur  = 8;
+      ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+      ctx.shadowColor = COLOR; ctx.shadowBlur = 8;
       ctx.stroke();
       ctx.shadowBlur = 0;
 
-      ctx.restore();
-
-      // Dot at current tip
-      const tip = sampled[endIdx - 1];
+      const tip = pts[endIdx - 1];
       ctx.beginPath();
       ctx.arc(mapX(tip[0]), mapY(tip[1]), 4.5, 0, Math.PI * 2);
-      ctx.fillStyle = color;
-      ctx.shadowColor = color; ctx.shadowBlur = 12;
+      ctx.fillStyle = COLOR;
+      ctx.shadowColor = COLOR; ctx.shadowBlur = 12;
       ctx.fill(); ctx.shadowBlur = 0;
 
-      // Counter
-      if (counter) {
-        const val = Math.round(lerp(0, counterTarget, easeOut3(t)));
-        counter.textContent = val + '%';
-      }
+      const e = easeOut3(t);
+      counterRet.textContent = (RET * e).toFixed(1).replace('.', ',') + '\u00a0%';
+      const sec = Math.round(DUR * e);
+      counterDur.textContent = Math.floor(sec / 60) + ':' + String(sec % 60).padStart(2, '0');
     }
 
-    function animate() {
-      if (started) return;
-      started = true;
-      const dur = 1800, t0 = performance.now();
-      function step(now) {
-        const raw = Math.min((now - t0) / dur, 1);
-        lastT = easeOut3(raw);
-        draw(lastT);
-        if (raw < 1) animFrame = requestAnimationFrame(step);
-      }
-      animFrame = requestAnimationFrame(step);
-    }
-
-    // Première apparition → lance l'animation
     const obs = new IntersectionObserver(entries => {
-      entries.forEach(e => { if (e.isIntersecting) { animate(); obs.disconnect(); } });
-    }, { threshold: 0.1 });
-    obs.observe(canvas.closest('.insight-half'));
-
-    // Retour dans le viewport après scroll → redessine l'état sauvegardé
-    const redrawObs = new IntersectionObserver(entries => {
-      entries.forEach(e => {
-        if (e.isIntersecting && lastT > 0) { resize(); draw(lastT); }
-      });
-    }, { threshold: 0.01 });
-    redrawObs.observe(canvas);
+      if (!entries[0].isIntersecting || started) return;
+      obs.disconnect();
+      started = true;
+      const t0 = performance.now();
+      (function step(now) {
+        lastT = Math.min((now - t0) / 1800, 1);
+        draw(lastT);
+        if (lastT < 1) requestAnimationFrame(step);
+      })(t0);
+    }, { threshold: 0.3 });
+    obs.observe(card);
 
     resize();
-    window.addEventListener('resize', () => {
-      const r = canvas.parentElement.getBoundingClientRect();
-      if (r.width > 0 && r.height > 0) { resize(); draw(lastT); }
-    }, { passive: true });
+    window.addEventListener('resize', () => { resize(); if (started) draw(lastT); }, { passive: true });
   }
 
-  makeChart('chart-bad',  'counter-bad',  badPts,  '#FF1515', 'rgba(255,21,21,',  18);
-  makeChart('chart-good', 'counter-good', goodPts, '#22C55E', 'rgba(34,197,94,',  68);
+  document.querySelectorAll('.proof[data-yt]').forEach(card => {
+    const id = card.dataset.yt;
+    const subsEl  = card.querySelector('[data-live="subs"]');
+    const viewsEl = card.querySelector('[data-live="views"]');
+    const setSubs  = subsEl  ? liveCounter(subsEl, +(subsEl.dataset.from || 0), 2200) : () => {};
+    const setViews = viewsEl ? liveCounter(viewsEl, 0, 2600) : () => {};
+
+    async function refresh() {
+      try {
+        const r = await fetch('/api/yt?v=' + id, { cache: 'no-store' });
+        if (!r.ok) return;
+        const d = await r.json();
+        setSubs(d.subs);
+        setViews(d.views);
+      } catch (e) {}
+    }
+    refresh();
+    setInterval(() => { if (!document.hidden) refresh(); }, 20000);
+
+    const canvas = card.querySelector('canvas[data-points]');
+    if (canvas) retentionChart(canvas);
+
+    const playBtn = card.querySelector('.proof-play');
+    playBtn && playBtn.addEventListener('click', () => {
+      const f = document.createElement('iframe');
+      f.src = 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0';
+      f.title = playBtn.getAttribute('aria-label').replace(/^Lire la vidéo /, '');
+      f.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
+      f.allowFullscreen = true;
+      playBtn.replaceWith(f);
+    });
+  });
 })();
+
 
 /* ══════════════════════════════════════════
    PREMIERE PRO TIMELINE
