@@ -883,23 +883,11 @@
   .ret-card .chart-counter-lbl { font-size: 9px; }
   .lbl-short { display: none; }
 
-  /* Téléphone : miniature et courbe restent côte à côte, en version compacte */
+  /* Téléphone : miniature puis courbe, l'une sous l'autre */
   @media (max-width: 760px) {
-    .proof { padding: 20px 12px; }
-    .proof-media { column-gap: 8px; }
-    .proof-media .ret-caption { font-size: 10px; }
-    .proof-media .proof-video { border-radius: var(--r-md); }
-    .proof-media .pv-play { width: 32px; height: 32px; }
-    .proof-media .pv-play svg { width: 14px; height: 14px; }
-    .proof-media .pv-dur { right: 4px; bottom: 4px; font-size: 9px; padding: 1px 4px; }
-    .proof-media .ret-card { padding: 6px 8px 5px; border-radius: var(--r-md); }
-    .proof-media .ret-card .chart-counter-wrap { margin-bottom: 3px; padding-bottom: 3px; }
-    .proof-media .ret-card .chart-counter { font-size: 14px; }
-    .proof-media .ret-card .chart-counter-lbl { font-size: 7px; letter-spacing: 0.02em; margin-top: 1px; white-space: nowrap; }
-    .proof-media .lbl-long { display: none; }
-    .proof-media .lbl-short { display: inline; }
-    .proof-media .ret-card .chart-canvas-wrap { min-height: 0; }
-    .proof-media .ret-card .chart-axis { display: none; }
+    .proof-media { grid-template-columns: minmax(0, 1fr); grid-template-areas: "video" "cap" "shot"; }
+    .proof-media .ret-caption { margin-top: 14px; }
+    .proof-media .ret-card .chart-canvas-wrap { flex: none; height: 120px; }
   }
 
 
