@@ -476,6 +476,11 @@
     margin: 0;
     white-space: nowrap;
   }
+  /* Téléphone : titre sur deux lignes, en grand, et sous-titre qui peut passer à la ligne */
+  @media (max-width: 600px) {
+    .hero-h1 { white-space: normal; font-size: clamp(2.3rem, 11.5vw, 3.4rem); text-wrap: balance; text-align: center; }
+    .hero-sub { white-space: normal; font-size: 14px; line-height: 1.5; max-width: 320px; margin: 0 auto; text-wrap: balance; }
+  }
   /* VSL */
   .hero-vsl {
     width: 100%;
